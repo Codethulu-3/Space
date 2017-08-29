@@ -44,7 +44,11 @@ public class SceneLoader
                             if (pixelColor.equals(textColor)) { //Specification found
                                 //Follow specifications
                                 found = true;
-                                newLevel.setTile(x, y, tileFromWord(sc.next(), handler));
+                                String tile = sc.next();
+                                newLevel.setTile(x, y, tileFromWord(tile, handler));
+                                if(tile.equals("Empty")){
+                                    break;
+                                }
                                 switch (sc.next()) {
                                     case "WITH":
                                         newLevel.addEntity(entityFromWord(sc.next(), x, y, handler));
@@ -91,6 +95,8 @@ public class SceneLoader
                 return new Platform(handler);
             case "Background":
                 return new Background(handler);
+            case "Empty":
+                return null;
             default:
                 System.err.println("LevelLoader doesn't know what Tile \"" + word + "\" is.");
                 return null;

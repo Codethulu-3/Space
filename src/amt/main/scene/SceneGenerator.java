@@ -55,7 +55,8 @@ public class SceneGenerator {
         //File world = new File("/res/levels/world.png");
         //System.out.println("Working Directory = " +
               //System.getProperty("user.dir"));
-        File world = new File("C:\\Users\\Alex\\Documents\\NetBeansProjects\\Space\\res\\levels\\world.png");
+        String path = System.getProperty("user.dir");
+        File world = new File(path + "\\res\\levels\\world.png");
         world.getParentFile().mkdirs();
         
         try {

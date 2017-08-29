@@ -3,6 +3,7 @@ package amt.main.scene;
 import amt.main.Handler;
 import amt.main.entities.Entity;
 import amt.main.entities.Player;
+import amt.main.gfx.Assets;
 import amt.main.gfx.Camera;
 import amt.main.tiles.Tile;
 import java.awt.Graphics;
@@ -21,6 +22,7 @@ public class Scene {
     private int shakeTimer = 0;
     private int shakeAmount = 0;
     
+    private Handler handler;
     private SceneGenerator sg = new SceneGenerator();
     
     public Scene(int width, int height, Handler handler) {
@@ -30,6 +32,7 @@ public class Scene {
         newEntities = new HashSet<>();
         camera = new Camera(handler);
         handler.setCamera(camera);
+        this.handler = handler;
         //sg.generateMap();
     }
     
@@ -56,14 +59,34 @@ public class Scene {
         } else {
             g.translate(0, 0);
         }
-        for (int x = 0; x < tiles.length; x++) {
-            for (int y = 0; y < tiles[0].length; y++) {
-                tiles[x][y].render(x, y, g);
-            }
-        }
+        
+        renderMap(g);
+        
         for (Entity e : entities) {
             e.render(g);
         } 
+    }
+    
+    private void renderMap(Graphics g){
+        int xEnd;
+        int yEnd;
+        if((int)(camera.xOffset() + handler.getWidth() / Assets.tileWidth) + 1 > tiles.length){
+            xEnd = tiles.length;
+        } else {
+            xEnd = (int)(camera.xOffset() + handler.getWidth() / Assets.tileWidth) + 1;
+        }
+        if((int)(camera.yOffset() + handler.getHeight() / Assets.tileHeight) + 2 > tiles[0].length){
+            yEnd = tiles[0].length;
+        } else {
+            yEnd = (int)(camera.yOffset() + handler.getHeight() / Assets.tileHeight) + 2;
+        }
+        for (int x = (int)camera.xOffset(); x < xEnd; x++) {
+            for (int y = (int)camera.yOffset(); y < yEnd; y++) {
+                if(tiles[x][y] != null){
+                    tiles[x][y].render(x, y, g);
+                }
+            }
+        }
     }
     
     public void screenShake(int amount, int length) {
